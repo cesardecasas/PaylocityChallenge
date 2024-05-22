@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
 using Api.Dtos.Paycheck;
 using Api.Models;
-using Api.QueryRepo;
 using Xunit;
 
 namespace ApiTests.IntegrationTests;

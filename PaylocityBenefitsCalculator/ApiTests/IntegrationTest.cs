@@ -2,7 +2,6 @@ using Api.Dtos.Employee;
 using Api.QueryRepo;
 using System;
 using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
 using Api.Models;
 using System.Collections.Generic;
 using System.Net.Http;

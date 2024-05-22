@@ -1,5 +1,4 @@
 ﻿using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
 using Api.Models;
 using Api.QueryRepo;
 using Api.Services;

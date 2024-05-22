@@ -1,9 +1,5 @@
-﻿using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
-using Api.QueryRepo;
+﻿using Api.QueryRepo;
 using Api.Models;
-using System;
-using System.IO;
 using Api.Dtos.Paycheck;
 
 namespace Api.Services

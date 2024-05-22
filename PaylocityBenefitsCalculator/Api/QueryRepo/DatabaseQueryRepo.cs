@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data;
-using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
-using Api.Models;
+﻿using Api.Models;
 using Npgsql;
 using NpgsqlTypes;
 

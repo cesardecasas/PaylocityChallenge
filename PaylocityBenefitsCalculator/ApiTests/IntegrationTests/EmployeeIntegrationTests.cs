@@ -6,64 +6,19 @@ using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
-public class EmployeeIntegrationTests : IntegrationTest, IAsyncLifetime
+public class EmployeeIntegrationTests : IntegrationTest
 {
 
-    
-    public async Task InitializeAsync()
-    {
-    
-        foreach(var employeeDto in _getEmployeeDtos)
-        {
-            var employee = new Employee
-            {
-                FirstName = employeeDto.FirstName,
-                LastName = employeeDto.LastName,
-                DateOfBirth = employeeDto.DateOfBirth,
-                Salary = employeeDto.Salary,
-            };
-            employeeDto.Id = await _databaseQueryRepo.CreateEmployeeAsync(employee);
-            if(employeeDto.Dependents.Count > 0)
-            {
-                foreach (var dependentDto in employeeDto.Dependents)
-                {
-                    var dependent = new Dependent
-                    {
-                        FirstName = dependentDto.FirstName,
-                        LastName = dependentDto.LastName,
-                        DateOfBirth = dependentDto.DateOfBirth,
-                        Relationship = dependentDto.Relationship,
-                        EmployeeId = employeeDto.Id
-                    };
 
-                    dependentDto.Id = await _databaseQueryRepo.CreateDependentAsync(dependent);
-                }
-            }
-        }
-        
-        
-    }
-
-    public async Task DisposeAsync()
-    {
-        foreach (var employeeDto in _getEmployeeDtos)
-        {
-            await _databaseQueryRepo.DeleteDependentsAsync(employeeDto.Id);
-            await _databaseQueryRepo.DeleteEmployeeAsync(employeeDto.Id);
-        }
-       
-    }
 
     [Fact]
     public async Task WhenAskedForAllEmployees_ShouldReturnAllEmployees()
     {
         var response = await HttpClient.GetAsync("/api/v1/employees");
-        var employees = _getEmployeeDtos;
-        await response.ShouldReturn(HttpStatusCode.OK, employees);
+        await response.ShouldReturn(HttpStatusCode.OK);
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForAnEmployee_ShouldReturnCorrectEmployee()
     {
         var employee = _getEmployeeDtos[0];

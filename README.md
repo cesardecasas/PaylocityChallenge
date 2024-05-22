@@ -77,3 +77,19 @@ If the local user and password credentials for the database are not the ones pro
 
 When runnning the integration tests make sure to run a local instance of the App using the `ApiTestEnv` launch option. 
 
+
+# Explaining Decisions
+
+### Data Layer
+
+PostgreSQL was used due to being a very common Database provider, being free, having built in functionality to handle relatioship limits like Employees only being able to have one Spouse or Domestic Partner, and SQL being the most common Database structure.
+
+### Adding a second launch option and second database
+
+By the nature of the tests it is benefitial to have a stand alone enviroment to execute them. Specially when testing get-all endpoints to be able to control data created and clean up without affecting dev/manual testing.
+
+### Dividing business logic in services
+
+Having the business logic in its own layer, creates an abstraction layer from an entry point like endpoints, as well as, from the data storage/acess point like the query repo.
+
+

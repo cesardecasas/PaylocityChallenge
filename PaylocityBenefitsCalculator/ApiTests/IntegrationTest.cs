@@ -5,6 +5,7 @@ using Api.Dtos.Dependent;
 using Api.Models;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ApiTests;
 
@@ -81,6 +82,7 @@ public class IntegrationTest : IDisposable
     {
         var connectionString = "Host=localhost;Port=5432;Database=paylocity_benefits.test;Username=postgres;Password=postgres;";
         _databaseQueryRepo = new DatabaseQueryRepo(connectionString);
+        SeedDatabase().GetAwaiter().GetResult();
     }
 
     protected HttpClient HttpClient
@@ -100,8 +102,44 @@ public class IntegrationTest : IDisposable
         }
     }
 
+    private async Task SeedDatabase()
+    {
+        foreach (var employeeDto in _getEmployeeDtos)
+        {
+            var employee = new Employee
+            {
+                FirstName = employeeDto.FirstName,
+                LastName = employeeDto.LastName,
+                DateOfBirth = employeeDto.DateOfBirth,
+                Salary = employeeDto.Salary,
+            };
+            employeeDto.Id = await _databaseQueryRepo.CreateEmployeeAsync(employee);
+            if (employeeDto.Dependents.Count > 0)
+            {
+                foreach (var dependentDto in employeeDto.Dependents)
+                {
+                    var dependent = new Dependent
+                    {
+                        FirstName = dependentDto.FirstName,
+                        LastName = dependentDto.LastName,
+                        DateOfBirth = dependentDto.DateOfBirth,
+                        Relationship = dependentDto.Relationship,
+                        EmployeeId = employeeDto.Id
+                    };
+
+                    dependentDto.Id = await _databaseQueryRepo.CreateDependentAsync(dependent);
+                }
+            }
+        }
+    }
+
     public void Dispose()
     {
+        foreach (var employeeDto in _getEmployeeDtos)
+        {
+             _databaseQueryRepo.DeleteDependentsAsync(employeeDto.Id);
+             _databaseQueryRepo.DeleteEmployeeAsync(employeeDto.Id);
+        }
         HttpClient.Dispose();
     }
 }
